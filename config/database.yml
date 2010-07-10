@@ -1,0 +1,14 @@
+default:
+    host:                   localhost
+  
+development:
+    port: 3306
+    database_name: demo_dev
+    user: root
+    password: root
+    
+production:
+    port:
+    database_name:
+    user:
+    password:
