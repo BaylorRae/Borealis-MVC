@@ -7,6 +7,12 @@ class Loader {
 		
 		$arguments = $GLOBALS['argv'];
 		
+		if( isset($arguments[1]) == FALSE ) {
+			echo "\nUse this to load a Javascript framework";
+			echo "\nLoad a javascript framework.\n./script/load javascript " . self::javascript('list') . "\n\n";
+			return;
+		}
+		
 		if( $arguments[1] == 'javascript' && isset($arguments[2]) )
 			self::javascript($arguments[2]);
 		else
