@@ -1,0 +1,6 @@
+#!/usr/bin/env php
+<?php
+
+define('BASE_PATH', realpath(dirname(__FILE__)));
+
+include BASE_PATH . '../../system/scripts/load/load.php';

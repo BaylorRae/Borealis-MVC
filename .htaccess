@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+   RewriteEngine on
+   RewriteRule    ^$ public/    [L]
+   RewriteRule    (.*) public/$1 [L]
+</IfModule>
+
+ErrorDocument 500 "<h2>Apache Server Error</h2><p>Make sure Mod Rewrite is enabled</p>"
