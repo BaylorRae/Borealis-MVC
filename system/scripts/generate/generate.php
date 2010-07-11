@@ -34,9 +34,13 @@ class Generator {
 			$template = file_get_contents('controller.tpl', true);
 			$template = str_replace('{$class_name}', $class_name, $template);
 			
+			// Create the controller
 			$file = fopen(BASE_PATH . '/../app/controllers/' . $name . '_controller.php', 'w');
 			fwrite($file, $template);
 			fclose($file);
+			
+			// Create the folder
+			mkdir(BASE_PATH . '/../app/views/' . strtolower($name));
 			
 			echo "\nCreated the controller " . $class_name . " in\n";
 			echo realpath(dirname(BASE_PATH . '/../app/controllers/')) . '/controllers/' . $name . '_controller.php' . "\n\n";
