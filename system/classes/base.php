@@ -81,13 +81,37 @@ class Base {
 			
 			if( file_exists($view_path) ) {
 				
+				// Create the page variables
 				$vars = $this->loadVars();
-				
 				foreach ($vars as $var => $value) {
 					$$var = $value;
 				}
 				
-				include $view_path;
+				// Get the contents of the view
+				$view = file_get_contents($view_path, true);
+				$layout = null;
+				$content = null;
+				
+				// Check if a layout has been created
+				if( file_exists(APP_PATH . '/views/layouts/' . str_ireplace('controller', '', strtolower($controller)) . '.html') )
+					$layout = file_get_contents(APP_PATH . '/views/layouts/' . str_ireplace('controller', '', strtolower($controller)) . '.html', true);
+				elseif( file_exists(APP_PATH . '/views/layouts/application.html') )
+					$layout = file_get_contents(APP_PATH . '/views/layouts/application.html', true);
+					
+				if( empty($layout) )
+					$content = $view;
+				else
+					$content = str_replace('{PAGE_CONTENT}', $view, $layout);
+				
+				// Create the file
+				$render_path = BASE_PATH . '/system/tmp/views/' . $controller . '-' . $action . '.' . time() . '.php';
+				$file = fopen($render_path, 'w');
+				fwrite($file, $content);
+				fclose($file);
+				
+				include_once $render_path;
+				
+				unlink($render_path);
 				
 			}else
 				die('View file not found in<br /><b>' . $view_path . '</b>');

@@ -1,1 +1,1 @@
-index
+<?= $categories->name ?>
