@@ -18,5 +18,9 @@ class WelcomeController extends ApplicationController {
 		}else
 			$this->renderAction($this, 'index');
 	}
+	
+	function startpage() {
+		
+	}
 }
 

@@ -28,10 +28,7 @@ class Routes extends Base {
 			$this->params('action', $to['action']);
 			
 		}else {
-			$this->connections[] = array($path, $to);
-			
-			
-						
+			$this->connections[] = array($path, $to);			
 		}
 		
 	}
