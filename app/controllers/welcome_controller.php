@@ -3,12 +3,20 @@
 
 class WelcomeController extends ApplicationController {
 	
+	
 	function index() {
 		
-		$this->title = 'Hello World';
-		$this->categories = Category::find(1);
+		$this->categories = Category::find('all');
 		
 	}
 	
+	function show() {
+		
+		if( $this->params('id') ) {
+			$this->category = Category::find($this->params('id'));
+			$this->renderView($this, 'show', 'json');
+		}else
+			$this->renderAction($this, 'index');
+	}
 }
 

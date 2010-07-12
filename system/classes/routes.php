@@ -7,8 +7,13 @@ class Routes extends Base {
 	
 	function __construct() {
 		
-		if( isset($_GET['url']) )
-			$this->path = $_GET['url'];
+		if( isset($_GET['borealis_url']) )
+			$this->path = $_GET['borealis_url'];
+			
+		foreach( $_GET as $name => $value ) {
+			if( $name != 'borealis_url' )
+				$this->params($name, $value);
+		}
 		
 	}
 		
@@ -19,23 +24,81 @@ class Routes extends Base {
 			
 		if( empty($this->path) ) {
 			
-			// $this->params['controller'] = $to['controller'];
-			// $this->params['action'] 	= $to['action'];
-			// $this->params['id'] 		= null;
-			
 			$this->params('controller', $to['controller']);
 			$this->params('action', $to['action']);
-			$this->params('id', null);
 			
 		}else {
+			$this->connections[] = array($path, $to);
 			
 			
+						
+		}
+		
+	}
+	
+	private function run_connect() {
+		
+		$connections = array_reverse($this->connections);
+		
+		foreach( $connections as $key => $value ) {
+			$path = $value[0];
+			$to = $value[1];
 			
+			// Create the segments
+			$segments = explode('/', $path);
+			
+			// Separate the current url
+			$_path = explode('/', $this->path);
+			
+			foreach( $segments as $position => $segment ) {
+				$position = $position - 1;
+				if( preg_match('/^:(\w+)/', $segment, $match) ) {
+					// $this->params(str_replace(':', '', $segment), $position - 1);
+					
+					$segment = str_replace(':', '', $segment);
+										
+					if( isset($_path[$position]) ) {
+						$this->params($segment, $_path[$position]);
+						
+						if( preg_match('/(\w+)\.(\w+)/', $_path[$position], $matches) ) {
+							$this->params($segment, $matches[1]);
+							$this->params('format', $matches[2]);
+						}
+												
+					}elseif( isset($to[$segment]) )
+						$this->params($segment, $to[$segment]);
+						
+				}else {
+					
+					if( isset($_path[$position]) ) {
+						$value = $_path[$position];
+						if( $value == $segment ) {
+							
+							// Get the controller
+							if( isset($to['controller']) )
+								$this->params('controller', $to['controller']);
+								
+							// Get the action
+							if( isset($to['action']) )
+								$this->params('action', $to['action']);
+								
+							// Get the format
+							if( isset($to['format']) )
+								$this->params('format', $to['format']);
+							
+						}
+					}
+					
+				}
+					
+			}
 		}
 		
 	}
 	
 	public function load() {
+		
+		$this->run_connect();
 		
 		// Get the controller name
 		$controller_name = strtolower($this->params('controller'));
@@ -50,7 +113,7 @@ class Routes extends Base {
 		$controller_name = ucfirst($controller_name) . 'Controller';
 		
 		// Initialize the controller
-		$this->renderAction($controller_name, $this->params('action'));
+		$this->renderAction($controller_name, $this->params('action'), $this->params('format'));
 		
 	}
 	

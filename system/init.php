@@ -9,7 +9,7 @@ define('APP_PATH', BASE_PATH . '/app');
 // 
 $params 		= array();
 $config 		= array();
-$variables 	= array();
+$variables 		= array();
 
 
 // Get the Base class
@@ -74,4 +74,6 @@ include_once APP_PATH . '/controllers/application_controller.php';
 
 // Start including the controller and views
 $Map->load();
+
+// print_r($params);
 ?>

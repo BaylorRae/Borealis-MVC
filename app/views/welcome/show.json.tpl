@@ -1,0 +1,1 @@
+<?= $category->to_json() ?>

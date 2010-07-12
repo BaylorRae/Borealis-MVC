@@ -1,8 +1,8 @@
 default:
+    port:                   3306
     host:                   localhost
   
 development:
-    port: 3306
     database_name: demo_dev
     user: root
     password: root

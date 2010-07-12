@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title><?= $title ?></title>
+<title>Page title</title>
 
 </head>
 <body>
-{PAGE_CONTENT}
+<?= $category->to_json() ?>
 </body>
 </html>

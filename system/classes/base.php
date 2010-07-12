@@ -46,8 +46,9 @@ class Base {
 		}
 	}
 	
-	public function renderAction($controller_name, $action) {
-			
+	public function renderAction($controller_name, $action, $format = null) {
+		$controller_name = (is_object($controller_name)) ? get_class($controller_name) : $controller_name;
+		
 		if( class_exists($controller_name) ) {
 			$controller_name = (is_object($controller_name)) ? get_class($controller_name) : $controller_name;
 			$controller = new $controller_name;
@@ -58,10 +59,10 @@ class Base {
 				$controller->$action();
 
 				// Create the variables for the view
-				$this->renderView($controller_name, $action);
+				$this->renderView($controller_name, $action, $format);
 
 			}else {
-				die('Could not load action <b>' . $this->params['action'] . '</b> in controller <b>' . $controller_name . '</b>');
+				die('Could not load action <b>' . $this->params('action') . '</b> in controller <b>' . $controller_name . '</b>');
 			}
 		}else {
 			die('Controller <b>' . $controller_name . '</b> could not be found in <br /><b>' . $controller_path . '</b>');
@@ -93,11 +94,11 @@ class Base {
 				$content = null;
 				
 				// Check if a layout has been created
-				if( file_exists(APP_PATH . '/views/layouts/' . str_ireplace('controller', '', strtolower($controller)) . '.html') )
-					$layout = file_get_contents(APP_PATH . '/views/layouts/' . str_ireplace('controller', '', strtolower($controller)) . '.html', true);
-				elseif( file_exists(APP_PATH . '/views/layouts/application.html') )
-					$layout = file_get_contents(APP_PATH . '/views/layouts/application.html', true);
-					
+				if( file_exists(APP_PATH . '/views/layouts/' . str_ireplace('controller', '', strtolower($controller)) . '.' . $format . '.tpl') )
+					$layout = file_get_contents(APP_PATH . '/views/layouts/' . str_ireplace('controller', '', strtolower($controller)) . '.' . $format . '.tpl', true);
+				elseif( file_exists(APP_PATH . '/views/layouts/application.' . $format . '.tpl') )
+					$layout = file_get_contents(APP_PATH . '/views/layouts/application.' . $format . '.tpl', true);
+									
 				if( empty($layout) )
 					$content = $view;
 				else
