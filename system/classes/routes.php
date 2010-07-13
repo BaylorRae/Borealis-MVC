@@ -69,6 +69,7 @@ class Routes extends Base {
 					
 					if( isset($_path[$position]) ) {
 						$value = $_path[$position];
+
 						if( $value == $segment ) {
 							
 							// Get the controller
@@ -83,7 +84,8 @@ class Routes extends Base {
 							if( isset($to['format']) )
 								$this->params('format', $to['format']);
 							
-						}
+						}else
+							return;
 					}
 					
 				}

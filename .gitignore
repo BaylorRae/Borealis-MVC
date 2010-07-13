@@ -1,4 +1,6 @@
-config/database.yml
+config/*
 app/controllers/*
 app/models/*
+app/views/*
 libraries/*
+public/*

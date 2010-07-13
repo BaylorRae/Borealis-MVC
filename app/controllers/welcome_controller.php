@@ -11,7 +11,6 @@ class WelcomeController extends ApplicationController {
 	}
 	
 	function show() {
-		
 		if( $this->params('id') ) {
 			$this->category = Category::find($this->params('id'));
 			$this->renderView($this, 'show', 'json');
@@ -19,8 +18,5 @@ class WelcomeController extends ApplicationController {
 			$this->renderAction($this, 'index');
 	}
 	
-	function startpage() {
-		
-	}
 }
 
