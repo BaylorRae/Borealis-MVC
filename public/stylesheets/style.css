@@ -1,0 +1,7 @@
+@import "reset.css";
+
+$mainColor: blue;
+
+#page-wrap {
+	color: $mainColor
+}
