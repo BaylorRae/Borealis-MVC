@@ -50,7 +50,6 @@ class Routes extends Base {
 			foreach( $segments as $position => $segment ) {
 				$position = $position - 1;
 				if( preg_match('/^:(\w+)/', $segment, $match) ) {
-					// $this->params(str_replace(':', '', $segment), $position - 1);
 					
 					$segment = str_replace(':', '', $segment);
 										
