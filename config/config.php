@@ -17,12 +17,8 @@ $config['Scaffold'] = array(
 		'extensions' => array(
 				'Sass',
 				'Minify',
-				'ServerImport'
+				'Import'
 			),
-		
-		// ServerImport extension config
-			// Normally written as $config['ServerImport']['preppend_@server'] = false
-		'ServerImport' => array('prepend_@server' => false)
 	);
 
 ?>

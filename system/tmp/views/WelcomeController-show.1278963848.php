@@ -1,1 +1,0 @@
-<?= (object) $category->to_json() ?>

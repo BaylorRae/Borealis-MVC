@@ -4,3 +4,4 @@ app/models/*
 app/views/*
 libraries/*
 public/*
+system/tmp/*
