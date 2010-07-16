@@ -19,7 +19,7 @@ class WelcomeController extends ApplicationController {
 	}
 	
 	function add() {
-		
+		$this->article = new Article;
 	}
 	
 }

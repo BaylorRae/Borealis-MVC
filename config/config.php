@@ -3,6 +3,8 @@
  // Current environment. Options are: development and production
 defined('ENVIRONMENT') || define('ENVIRONMENT', 'development');
 
+$config['ROOT'] = 'http://example.com';
+
 /**
  * Config for Scaffold
  * Documentation for config can be found here:

@@ -36,7 +36,7 @@ class Base {
 	
 	public static function params($name, $value = null) {
 		global $params;
-		
+				
 		if( empty($value) ) {
 			if( isset($params[$name]) )
 				return $params[$name];
@@ -46,11 +46,22 @@ class Base {
 		}
 	}
 	
+	public static function helpers($name, $value = null) {
+		global $helpers;
+		
+		if( empty($value) ) {
+			if( isset($helpers[$name]) )
+				return $helpers[$name];
+		}else {
+			$helpers[$name] = $value;
+			return $helpers[$name];
+		}
+	}
+	
 	public function renderAction($controller_name, $action, $format = null) {
 		$controller_name = (is_object($controller_name)) ? get_class($controller_name) : $controller_name;
 		
 		if( class_exists($controller_name) ) {
-			$controller_name = (is_object($controller_name)) ? get_class($controller_name) : $controller_name;
 			$controller = new $controller_name;
 
 			if( method_exists($controller, $action) ) {
@@ -147,11 +158,64 @@ class Base {
 	public static function loadVars() {
 		global $variables, $params;
 		
+		$helpers = Base::loadHelpers();
+		
 		$params = array('params' => $params);
 		
-		$output = array_merge($params, $variables);
+		$output = array_merge($params, $variables, $helpers);
 		
 		return $output;
+	}
+
+	private function loadHelpers() {
+		global $helpers;
+		
+		// Check Borealis's helpers "/helpers"
+		if( $handle = opendir(BASE_PATH . '/helpers') ) {
+			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != ".." && $file[0] != '.' && substr($file, -4) == '.php') {
+					
+					include_once BASE_PATH . '/helpers/' . $file;
+					
+					$classname = ucfirst(substr(strtolower($file), 0, -4)) . 'Helper';
+					
+					if( class_exists($classname) ) {
+						
+						Base::helpers(substr(strtolower($file), 0, -4) . '_helper', new $classname);
+						
+					}
+					
+				}
+			}
+			closedir($handle);
+			
+		
+		}
+		
+		// Check user helpers
+		if( $handle = opendir(APP_PATH . '/helpers') ) {
+			
+			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != ".." && $file[0] != '.' && substr($file, -4) == '.php') {
+					
+					include_once APP_PATH . '/helpers/' . $file;
+					
+					$classname = ucfirst(substr(strtolower($file), 0, -4)) . 'Helper';
+					
+					if( class_exists($classname) ) {
+						
+						Base::helpers(substr(strtolower($file), 0, -4) . '_helper', new $classname);
+						
+					}
+					
+				}
+			}
+			closedir($handle);
+			
+		}
+		
+		return $helpers;
+		
 	}
 }
 
