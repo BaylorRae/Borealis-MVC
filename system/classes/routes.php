@@ -15,6 +15,10 @@ class Routes extends Base {
 				$this->params($name, $value);
 		}
 		
+		foreach( $_POST as $name => $value ) {
+			$this->params($name, $value);
+		}
+		
 	}
 		
 	public function connect($path, $to) {
