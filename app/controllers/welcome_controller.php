@@ -18,5 +18,9 @@ class WelcomeController extends ApplicationController {
 			$this->renderAction($this, 'index');
 	}
 	
+	function add() {
+		
+	}
+	
 }
 

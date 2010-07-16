@@ -75,5 +75,4 @@ include_once APP_PATH . '/controllers/application_controller.php';
 // Start including the controller and views
 $Map->load();
 
-// print_r($params);
 ?>

@@ -93,9 +93,23 @@ class Base {
 				$layout = null;
 				$content = null;
 				
-				// Check if a layout has been created
-				if( file_exists(APP_PATH . '/views/layouts/' . str_ireplace('controller', '', strtolower($controller)) . '.' . $format . '.tpl') )
+				// ===================
+				// = Load the layout =
+				// ===================
+					// Hierarchy
+					// 1. controller-action.format.tpl
+					// 2. controller.format.tpl
+					// 3. application.format.html
+				
+				// Look for action specific
+				if( file_exists(APP_PATH . '/views/layouts/' . str_ireplace('controller', '', strtolower($controller)) . '-' . $action . '.' . $format . '.tpl') )
+					$layout = file_get_contents(APP_PATH . '/views/layouts/' . str_ireplace('controller', '', strtolower($controller)) . '-' . $action . '.' . $format . '.tpl', true);
+				
+				// Check for controller specific
+				elseif( file_exists(APP_PATH . '/views/layouts/' . str_ireplace('controller', '', strtolower($controller)) . '.' . $format . '.tpl') )
 					$layout = file_get_contents(APP_PATH . '/views/layouts/' . str_ireplace('controller', '', strtolower($controller)) . '.' . $format . '.tpl', true);
+					
+				// Check for a default application view
 				elseif( file_exists(APP_PATH . '/views/layouts/application.' . $format . '.tpl') )
 					$layout = file_get_contents(APP_PATH . '/views/layouts/application.' . $format . '.tpl', true);
 									
