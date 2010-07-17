@@ -25,13 +25,24 @@ class Base {
 			return $variables[$name];
 	}
 	
-	public static function config($name) {
+	public static function config($name, $value = null) {
 		global $config;
 		
-		if( in_array($name, array('DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME')) )
-			return $config[ENVIRONMENT][$name];
-		else
-			return $config[$name];
+		if( in_array($name, array('DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME')) ) {
+			if( empty($value) )
+				return $config[ENVIRONMENT][$name];
+			else {
+				$config[ENVIRONMENT][$name] = $value;
+				return $config[ENVIRONMENT][$name];
+			}
+		}else {
+			if( empty($value) )
+				return $config[$name];
+			else {
+				$config[$name] = $value;
+				return $config[$name];
+			}
+		}
 	}
 	
 	public static function params($name, $value = null) {
@@ -56,6 +67,14 @@ class Base {
 			$helpers[$name] = $value;
 			return $helpers[$name];
 		}
+	}
+	
+	public function connections($path = null, $to = null) {
+		global $connections;
+		if( empty($path) || empty($to) )
+			return $connections;
+		else
+			$connections[] = array($path, $to);
 	}
 	
 	public function renderAction($controller_name, $action, $format = null) {
@@ -215,6 +234,38 @@ class Base {
 		}
 		
 		return $helpers;
+		
+	}
+
+	public function redirectTo($controller_name, $action, $format = null, $params = null) {
+		
+		$path = $this->config('_path');
+		$segments = explode('/', $path);
+		
+		// Check for a controller
+		$controller_name = (is_object($controller_name)) ? get_class($controller_name) : $controller_name;
+		
+		$params = (!is_array($params)) ? array() : $params;
+		
+		$params['controller'] = str_replace('controller', '', strtolower($controller_name));
+		$params['action'] = $action;
+				
+		foreach( $params as $key => $value ) {
+			foreach( $segments as $segment ) {
+				if( ':' . $key == $segment ) {
+					$path = str_replace($segment, $value, $path);
+				}
+			}
+		}
+		
+		$path = preg_replace('/\/:(\w+)/', '', $path);
+				
+		$url = rtrim($this->config('ROOT'), '/') . $path;
+		
+		if( !empty($format) )
+			$url .= '.' . $format;
+						
+		echo '<meta http-equiv="refresh" content="0;url=' . $url . '" />';
 		
 	}
 }

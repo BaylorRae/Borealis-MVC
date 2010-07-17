@@ -3,7 +3,6 @@
 class Routes extends Base {
 	
 	private 	$path = null;
-	public 		$connections = array();
 	
 	function __construct() {
 		
@@ -20,7 +19,7 @@ class Routes extends Base {
 		}
 		
 	}
-		
+			
 	public function connect($path, $to) {
 		
 		if( is_array($to) == FALSE )
@@ -32,14 +31,15 @@ class Routes extends Base {
 			$this->params('action', $to['action']);
 			
 		}else {
-			$this->connections[] = array($path, $to);			
+			// $this->connections[] = array($path, $to);
+			$this->connections($path, $to);
 		}
 		
 	}
 	
 	private function run_connect() {
 		
-		$connections = array_reverse($this->connections);
+		$connections = array_reverse($this->connections());
 		
 		foreach( $connections as $key => $value ) {
 			$path = $value[0];
@@ -53,7 +53,11 @@ class Routes extends Base {
 			
 			foreach( $segments as $position => $segment ) {
 				$position = $position - 1;
+				
 				if( preg_match('/^:(\w+)/', $segment, $match) ) {
+					
+					// Store the connection
+					$this->config('_path', $path);
 					
 					$segment = str_replace(':', '', $segment);
 										
@@ -72,16 +76,23 @@ class Routes extends Base {
 					
 					if( isset($_path[$position]) ) {
 						$value = $_path[$position];
-
+						
 						if( $value == $segment ) {
+							
+							// Store the connection
+							$this->config('_path', $path);
 							
 							// Get the controller
 							if( isset($to['controller']) )
 								$this->params('controller', $to['controller']);
+							else
+								die('Need default controller');
 								
 							// Get the action
 							if( isset($to['action']) )
 								$this->params('action', $to['action']);
+							else
+								die('Need default action');
 								
 							// Get the format
 							if( isset($to['format']) )
@@ -92,7 +103,7 @@ class Routes extends Base {
 					}
 					
 				}
-					
+			
 			}
 		}
 		

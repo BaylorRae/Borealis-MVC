@@ -11,6 +11,7 @@ $params 		= array();
 $config 		= array();
 $variables 		= array();
 $helpers 		= array();
+$connections 	= array();
 
 
 // Get the Base class
