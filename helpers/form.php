@@ -120,14 +120,12 @@ class FormHelper extends HelperBase {
 		echo '</select>';
 	}
 	
-	public function submit($name, $text, $options = null) {
+	public function submit($text, $options = null) {
 		$options = (empty($options) || !is_array($options)) ? array() : $options;
-		
-		$text = (empty($text)) ? ucfirst($name) : $text;
-		
+				
 		$options['value'] = $text;
 		
-		$attributes = $this->attributes($name, $options);
+		$attributes = $this->attributes(null, $options);
 		
 		echo '<input type="submit"' . $attributes . ' />';
 	}
@@ -136,8 +134,10 @@ class FormHelper extends HelperBase {
 		$attributes = ' ';
 		$options = (empty($options) || !is_array($options)) ? array() : $options;
 				
-		$options['name'] = $this->options->name . '[' . $name . ']';
-		$options['id'] = $this->options->name . '[' . $name . ']';
+		if( !empty($name) ) {
+			$options['name'] = $this->options->name . '[' . $name . ']';
+			$options['id'] = $this->options->name . '[' . $name . ']';
+		}
 		
 		// Create the html attributes
 		foreach( $options as $prop => $value ) :
