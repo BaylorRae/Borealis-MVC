@@ -236,11 +236,24 @@ class Base {
 		return $helpers;
 		
 	}
-
+	
+	
+	/**
+	 * Redirect to a url
+	 *
+	 * @param string $controller_name 
+	 * @param string $action 
+	 * @param string $format 
+	 * @param array $params (optional) 
+	 * @return void
+	 * @author Baylor Rae'
+	 * 
+	 * @fixme When using custom paths that don't specify a :controller or :action variable
+	 */	
 	public function redirectTo($controller_name, $action, $format = null, $params = null) {
 		
 		$path = $this->config('_path');
-		$segments = explode('/', $path);
+		$segments = explode('/', $path);		
 		
 		// Check for a controller
 		$controller_name = (is_object($controller_name)) ? get_class($controller_name) : $controller_name;
@@ -249,7 +262,7 @@ class Base {
 		
 		$params['controller'] = str_replace('controller', '', strtolower($controller_name));
 		$params['action'] = $action;
-				
+		
 		foreach( $params as $key => $value ) {
 			foreach( $segments as $segment ) {
 				if( ':' . $key == $segment ) {
@@ -257,15 +270,15 @@ class Base {
 				}
 			}
 		}
-		
-		$path = preg_replace('/\/:(\w+)/', '', $path);
 				
+		$path = preg_replace('/\/:(.+)/', '', $path);
+								
 		$url = rtrim($this->config('ROOT'), '/') . $path;
-		
+				
 		if( !empty($format) )
 			$url .= '.' . $format;
 						
-		echo '<meta http-equiv="refresh" content="0;url=' . $url . '" />';
+		// echo '<meta http-equiv="refresh" content="0;url=' . $url . '" />';
 		
 	}
 }

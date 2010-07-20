@@ -53,25 +53,56 @@ class Routes extends Base {
 			
 			foreach( $segments as $position => $segment ) {
 				$position = $position - 1;
-				
-				if( preg_match('/^:(\w+)/', $segment, $match) ) {
-					
-					// Store the connection
-					$this->config('_path', $path);
-					
-					$segment = str_replace(':', '', $segment);
-										
-					if( isset($_path[$position]) ) {
-						$this->params($segment, $_path[$position]);
-						
-						if( preg_match('/(\w+)\.(\w+)/', $_path[$position], $matches) ) {
-							$this->params($segment, $matches[1]);
-							$this->params('format', $matches[2]);
-						}
 												
-					}elseif( isset($to[$segment]) )
-						$this->params($segment, $to[$segment]);
+				if( preg_match('/^:(\w+)/', $segment) ) {
+					
+					// Check for a RegExpr
+					if( preg_match('/\[(.+)\]/', $segment, $match) && isset($_path[$position]) ) {
 						
+						// Store the connection
+						$this->config('_path', $path);
+						
+						// Get the expression
+						$pattern = $match[0];
+						
+						$text = $_path[$position];
+												
+						if( preg_match("/^$pattern$/", $text, $match) ) {
+							
+							$new_segment = str_replace(array(':', $pattern), '', $segment);
+							
+							$this->params($new_segment, $match[0]);
+							
+						}else
+							return;
+						
+					// No RegExpr
+					}else {
+						
+						// Store the connection
+						$this->config('_path', $path);
+
+						$segment = str_replace(':', '', $segment);
+
+						// If the url has this section /1/2/3
+						if( isset($_path[$position]) ) {
+
+							// Save the url section
+							$this->params($segment, $_path[$position]);
+
+							// Check for a format index.html
+							if( $segment == 'action' ) {
+								if( preg_match('/(\w+)\.(\w+)/', $_path[$position], $matches) ) {
+									$this->params($segment, $matches[1]);
+									$this->params('format', $matches[2]);
+								}
+							}
+
+						}elseif( isset($to[$segment]) )
+							$this->params($segment, $to[$segment]);
+						
+					}
+					
 				}else {
 					
 					if( isset($_path[$position]) ) {
