@@ -247,13 +247,19 @@ class Base {
 	 * @param array $params (optional) 
 	 * @return void
 	 * @author Baylor Rae'
-	 * 
-	 * @fixme When using custom paths that don't specify a :controller or :action variable
 	 */	
 	public function redirectTo($controller_name, $action, $format = null, $params = null) {
 		
-		$path = $this->config('_path');
-		$segments = explode('/', $path);		
+		$path = $this->config('_path');		
+		
+		// Make sure the path includes a controller and an action
+		if( !preg_match('/:controller/', $path) || !preg_match('/:action/', $path) )
+			
+			// If it doesn't, then use the default path
+			$path = $this->params('_default_path');
+			
+		// Get each variable in the path
+		$segments = explode('/', $path);
 		
 		// Check for a controller
 		$controller_name = (is_object($controller_name)) ? get_class($controller_name) : $controller_name;
@@ -270,15 +276,15 @@ class Base {
 				}
 			}
 		}
-				
+		
 		$path = preg_replace('/\/:(.+)/', '', $path);
-								
+							
 		$url = rtrim($this->config('ROOT'), '/') . $path;
 				
 		if( !empty($format) )
 			$url .= '.' . $format;
 						
-		// echo '<meta http-equiv="refresh" content="0;url=' . $url . '" />';
+		echo '<meta http-equiv="refresh" content="0;url=' . $url . '" />';
 		
 	}
 }

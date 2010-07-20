@@ -40,10 +40,13 @@ class Routes extends Base {
 	private function run_connect() {
 		
 		$connections = array_reverse($this->connections());
-		
+			
 		foreach( $connections as $key => $value ) {
 			$path = $value[0];
 			$to = $value[1];
+			
+			if( isset($to['default']) )
+				$this->params('_default_path', $path);
 			
 			// Create the segments
 			$segments = explode('/', $path);
