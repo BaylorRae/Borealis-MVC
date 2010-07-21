@@ -68,7 +68,15 @@ class Base {
 			return $helpers[$name];
 		}
 	}
-	
+
+	public static function flash($message) {
+		global $flash;
+		
+		$_SESSION['borealis_flash'][] = $message;
+		$flash[] = $message;
+				
+	}
+		
 	public function connections($path = null, $to = null) {
 		global $connections;
 		if( empty($path) || empty($to) )
@@ -175,14 +183,12 @@ class Base {
 	}
 	
 	public static function loadVars() {
-		global $variables, $params;
-		
+		global $variables, $params, $flash;
+						
 		$helpers = Base::loadHelpers();
 		
-		$params = array('params' => $params);
-		
-		$output = array_merge($params, $variables, $helpers);
-		
+		$output = array_merge(array('params' => $params), $variables, $helpers, array('flash' => $flash));
+				
 		return $output;
 	}
 
@@ -249,6 +255,8 @@ class Base {
 	 * @author Baylor Rae'
 	 */	
 	public function redirectTo($controller_name, $action, $format = null, $params = null) {
+		
+		Base::$rendered = true;
 		
 		$path = $this->config('_path');		
 		

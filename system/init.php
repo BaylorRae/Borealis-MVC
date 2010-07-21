@@ -1,17 +1,24 @@
 <?php
 
+// Allow Sessions on the page
+session_start();
+
+if( !isset($_SESSION['borealis_flash']) )
+	$_SESSION['borealis_flash'] = array();
+
 // Setup our locations
 define('BASE_PATH', realpath(dirname('../../')));
 define('LIBRARIES', BASE_PATH . '/libraries');
 define('APP_PATH', BASE_PATH . '/app');
 
 
-// 
+// Common variables
 $params 		= array();
 $config 		= array();
 $variables 		= array();
 $helpers 		= array();
 $connections 	= array();
+$flash 			= array();
 
 
 // Get the Base class
@@ -75,6 +82,10 @@ include_once BASE_PATH . '/config/routes.php';
 include_once APP_PATH . '/controllers/application_controller.php';
 
 
+
+// Store the flashes
+$flash = $_SESSION['borealis_flash'];
+$_SESSION['borealis_flash'] = array();
 
 
 // Start including the controller and views
