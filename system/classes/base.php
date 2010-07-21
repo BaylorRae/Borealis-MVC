@@ -69,11 +69,12 @@ class Base {
 		}
 	}
 
-	public static function flash($message) {
+	public static function flash($message, $type = null) {
 		global $flash;
+		$type = (empty($type)) ? 'message' : $type;
 		
-		$_SESSION['borealis_flash'][] = $message;
-		$flash[] = $message;
+		$_SESSION['borealis_flash'][$message] = (object) array('message' => $message, 'type' => $type);
+		$flash[$message] = (object) array('message' => $message, 'type' => $type);
 				
 	}
 		

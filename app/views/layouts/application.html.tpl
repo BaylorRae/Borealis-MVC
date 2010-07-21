@@ -12,8 +12,8 @@
 <body>
 	
 	<?php if( count($flash) ) : ?>
-		<?php foreach( $flash as $msg ) : ?>
-			<p class="notice"><%= $msg %></p>
+		<?php foreach( $flash as $f ) : ?>
+			<p class="<%= $f->type %>"><%= $f->message %></p>
 		<?php endforeach ?>
 	<?php endif ?>
 	
