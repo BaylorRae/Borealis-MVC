@@ -2,7 +2,7 @@
 
 class Base {
 	
-	public $params = array();
+	public static $params = array();
 	public $config = array();
 	public $variables = array();
 	public static $rendered = false;
@@ -256,7 +256,7 @@ class Base {
 		if( !preg_match('/:controller/', $path) || !preg_match('/:action/', $path) )
 			
 			// If it doesn't, then use the default path
-			$path = $this->params('_default_path');
+			$path = $this->config('_default_path');
 			
 		// Get each variable in the path
 		$segments = explode('/', $path);

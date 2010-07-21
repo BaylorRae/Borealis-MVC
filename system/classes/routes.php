@@ -30,6 +30,9 @@ class Routes extends Base {
 			$this->params('controller', $to['controller']);
 			$this->params('action', $to['action']);
 			
+			if( isset($to['default']) )
+				$this->config('_default_path', $path);
+			
 		}else {
 			// $this->connections[] = array($path, $to);
 			$this->connections($path, $to);
@@ -40,14 +43,14 @@ class Routes extends Base {
 	private function run_connect() {
 		
 		$connections = array_reverse($this->connections());
-			
+					
 		foreach( $connections as $key => $value ) {
 			$path = $value[0];
 			$to = $value[1];
 			
 			if( isset($to['default']) )
-				$this->params('_default_path', $path);
-			
+				$this->config('_default_path', $path);
+								
 			// Create the segments
 			$segments = explode('/', $path);
 			
