@@ -138,7 +138,7 @@ class Base {
 					// Hierarchy
 					// 1. controller-action.format.tpl
 					// 2. controller.format.tpl
-					// 3. application.format.html
+					// 3. application.format.tpl
 				
 				// Look for action specific
 				if( file_exists(APP_PATH . '/views/layouts/' . str_ireplace('controller', '', strtolower($controller)) . '-' . $action . '.' . $format . '.tpl') )
